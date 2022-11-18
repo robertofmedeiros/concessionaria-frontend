@@ -3,14 +3,72 @@
  <head>
        <title>Exemplo 01 - consumindo via Javascript</title>
        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	   <meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			.text-center {
+				text-align:center;
+			}
+
+			table {
+				width:100%;
+			}
+			.titulo{
+				margin-bottom:-10px;
+			}
+
+			table thead tr th
+			{
+				border-bottom:2px solid #000;
+			}
+    </style>
  </head>
  <body>
-        <div id="resultado"></div>
+		<h2 class="titulo">Lista de Marca</h2>
+		<hr/>
+        <table cellspacing="0" id="table">
+			<thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+		
+		</tbody>
+		</table>
         <script type="text/javascript">
-           $.get( "http://localhost:8081/marca", function( data ) {
-				console.log(data);
-				$("#resultado").append(JSON.stringify(data));                                             
-		   });
+			var url = "http://localhost:8081/marca";// Url do servidor
+
+			var xhttp = new XMLHttpRequest();
+			try{
+				xhttp.open("GET", url, false); // define o tipo da requisição
+				xhttp.send();// Executa a requisição
+				
+				if(xhttp.status === 200) {
+					console.log(xhttp.status);
+					
+					var result = JSON.parse(xhttp.responseText);
+					console.log(result);
+					
+					var row = $('<tr class="text-center"/>');
+					
+					for (const linha of result) {
+						console.log(linha.descricao);
+						var row = $('<tr class="text-center"/>');
+						row.append($('<td/>').html(linha.id));
+						row.append($('<td/>').html(linha.nome));
+						row.append($('<td/>').html(linha.descricao));
+						$(table).append(row);
+					}
+				}else{
+					alert("Requição com o servidor falhou!");
+				}
+			} catch (e){
+				alert(e.message);
+			}
        </script>
  </body>
  </html>
