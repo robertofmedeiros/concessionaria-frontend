@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>Exemplo 03 - consumindo via Javascript (POST)</title>
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	   <meta charset="UTF-8">
+	</head>
+		<body>
+		   <form id="form" method="post">
+			   <input type="text", id="nome" placeholder="Nome"/></br>
+			   <input type="text", id="descricao" placeholder="Descrição"/></br>
+			   <input type="submit" value="Salvar"/>
+			</form> 
+			<div>
+			<h4 id="retorno"></h4>
+			</div>
+		</body>
+		<script>
+			var form=document.getElementById('form')
+
+			form.addEventListener('submit', function(e){
+				 e.preventDefault()
+
+				 var nome=document.getElementById('nome').value
+				 var descricao=document.getElementById('descricao').value
+
+				 fetch('http://localhost:8081/marca', {
+				  method: 'POST',
+				  body: JSON.stringify({
+					nome:nome,
+					descricao:descricao,
+
+				  }),
+				  headers: {
+					'Content-type': 'application/json; charset=UTF-8',
+				  }
+				  })
+				  .then(function(response){ 
+				  return response.json()})
+				  .then(function(data)
+				{
+				  console.log(data)
+				  retorno=document.getElementById("retorno")
+				  retorno.innerHTML = "Cadastro realizado com sucesso!"  
+				}).catch(error => console.error('Error:', error)); 
+			});
+		</script>
+</html>
